@@ -1,0 +1,329 @@
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zaproszenie Urodzinowe</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #ffd6e7, #ffe9b8, #d8f3ff);
+      overflow: auto;
+    }
+
+    .floating {
+      position: fixed;
+      font-size: 28px;
+      animation: floatDown linear infinite;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    @keyframes floatDown {
+      from {
+        transform: translateY(-120px) rotate(0deg);
+      }
+      to {
+        transform: translateY(110vh) rotate(360deg);
+      }
+    }
+
+    .card {
+      width: min(92vw, 680px);
+      background: rgba(255,255,255,0.92);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      padding: 28px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #ff5c8a;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 52px);
+      color: #d6336c;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      font-size: clamp(16px, 2.7vw, 22px);
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .cake {
+      margin: 10px 0 18px;
+    }
+
+    .slider {
+      position: relative;
+      width: min(100%, 300px);
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      aspect-ratio: 4 / 5;
+      background: #f8d9e6;
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s ease;
+    }
+
+    .slide {
+      min-width: 100%;
+      flex: 0 0 100%;
+      height: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(214, 51, 108, 0.25);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .dot.active {
+      background: #d6336c;
+      transform: scale(1.15);
+    }
+
+    .question {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800;
+      color: #222;
+      margin-bottom: 28px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      min-height: 90px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 16px 28px;
+      font-size: 20px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, font-size 0.2s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    }
+
+    .yes-button {
+      background: #ff4d8d;
+      color: white;
+    }
+
+    .yes-button:hover {
+      transform: scale(1.06);
+    }
+
+    .no-button {
+      background: #f1f3f5;
+      color: #444;
+      position: relative;
+    }
+
+    .hidden { display: none; }
+
+    .success-screen {
+      text-align: center;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .success-screen h2 {
+      margin: 0 0 20px;
+      font-size: clamp(28px, 5vw, 50px);
+      color: #d6336c;
+    }
+
+    .success-screen p {
+      font-size: clamp(18px, 3vw, 24px);
+      color: #333;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="mainCard">
+    <div id="questionScreen">
+      <div class="badge">🎉 NIESPODZIANKA 🎉</div>
+      <h1>Mam pytanie</h1>
+      <div class="cake">
+        <div class="slider" id="photoSlider">
+          <div class="slides" id="slides">
+            <div class="slide"><img src="photo1.jpg.jpg" alt="Nasze zdjęcie 1" /></div>
+            <div class="slide"><img src="photo2.jpg.jpg" alt="Nasze zdjęcie 2" /></div>
+            <div class="slide"><img src="photo3.jpg.jpg" alt="Nasze zdjęcie 3" /></div>
+            <div class="slide"><img src="photo4.jpg.jpg" alt="Nasze zdjęcie 4" /></div>
+          </div>
+        </div>
+        <div class="slider-dots" id="sliderDots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+      <p class="subtitle">Wszystkiego Najlepszego z okazji urodzin!!! </p>
+      <div class="question">Czy pójdziesz ze mną na randkę urodzinową we Wiedniu?</div>
+
+      <div class="buttons">
+        <button class="yes-button" id="yesButton">Tak 💖</button>
+        <button class="no-button" id="noButton">Nie 🙈</button>
+      </div>
+    </div>
+
+    <div id="successScreen" class="success-screen hidden">
+           <h2>Gratulacje użytkowniczko:> </h2>
+      <p>Tutaj taki mały prezent jest dla Ciebie z racji,że nie moge byc na Twoich urodzinach<br>Mam nadzieję,że spedzisz je w miłym gronie i bedziesz sie dobrze bawić. 💖</p>
+
+      <div class="envelope-wrapper" style="margin-top:20px;display:flex;justify-content:center;">
+        <div id="envelope" style="position:relative;width:200px;height:130px;background:#ff6b9a;border-radius:6px;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+          <div id="flap" style="position:absolute;top:0;left:0;width:0;height:0;border-left:100px solid transparent;border-right:100px solid transparent;border-top:65px solid #ff4d8d;transform-origin:top;transition:transform 0.6s ease;"></div>
+          <div style="position:absolute;bottom:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;">
+            💌 Otwórz list
+          </div>
+        </div>
+      </div>
+
+      <div id="letter" class="hidden" style="margin-top:25px;background:#fff0f6;border-radius:25px;padding:20px;font-size:18px;line-height:1.6;color:#333;box-shadow:0 8px 20px rgba(0,0,0,0.1);animation: popIn 0.5s ease;max-height:400px;overflow-y:auto;">
+        <h3>💌 List urodzinowy</h3>
+        <p>Piszę ten list w jednym z ważniejszych dla mnie moomentów w tym roku. W dniu Twoich urodzin,cieszę się,że mogę obchodzić urodziny ważnej mi osoby,z która chcę być "na dobre i na złe",bo tak naprawdę nie ma nikogo na całym świecie,kto znaczyłby dla mnnie więcej niż Ty.
+          Wszystkiego najlepszego z okazaji urodzin.Życzę Ci,żebyś miała więcej zmarszczek taki żarcik,hue hue.Ale tak serio życzę Ci,żebyś mogła cieszyć się chwilą i robić to,na co masz ochotę,spędzając czas z najbliższymi Ci osobami.Żebyśmy mogli toworzyć niezapomniane wspomnienia oraz żeby nigdy nie znikał Ci uśmiech z twarzy uwielbiam na niego patrzeć. Mam jeszcze mały prezent. Może poetą nie zostane,ale napisalem Ci wierszyk:
+          Spotkałem Cię niespodziewanie,niczego nie planowałem, o niczym nie myślałem. A jednak Twój urok mną zawładnął-sercem, duszą i ciałem.
+          Nigdy nie myślałem, że los potrafi tak zaskakiwać,bo czasem jedno spotkanie może całe życie zmienić. „Kocham Ciebie” dwa proste słowa,a jednak tak wiele znaczą. Ale dla mnie to wciąż za mało mógłbym krzyczeć, śpiewać na głos i mówić całemu światu,jaką mam wspaniałą dziewczynę. Więc powiem, szczerze i prosto: chcę iść przez życie razem z Tobą, dzielić z Tobą każdy dzień i kochać Cię coraz mocniej.  
+
+
+
+
+
+
+
+        <br><br>
+        Dziękuję, że jesteś i że mogę być częścią Twojego życia. <br>
+
+
+
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      'Na pewno nie? 🙃',
+      'Pomyśl jeszcze chwilkę 🥺',
+      'Obiecuję miły wieczór 🌹',
+      'A może jednak??',
+      'Gratulacje uzytkowniku zostało Ci do kliknięcia TAAAAAK 💕',
+      'Grrrr kliknij tak!?!?!?!? '
+    ];
+
+    let messageIndex = 0;
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const questionScreen = document.getElementById('questionScreen');
+    const successScreen = document.getElementById('successScreen');
+
+    function handleNoClick() {
+      noButton.textContent = messages[messageIndex];
+      messageIndex = (messageIndex + 1) % messages.length;
+
+      const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+      yesButton.style.fontSize = `${currentSize * 1.18}px`;
+      yesButton.style.padding = `${16 + messageIndex * 2}px ${28 + messageIndex * 4}px`;
+
+      const maxX = window.innerWidth * 0.25;
+      const maxY = window.innerHeight * 0.12;
+      const randomX = (Math.random() - 0.5) * maxX;
+      const randomY = (Math.random() - 0.5) * maxY;
+      noButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    function handleYesClick() {
+      questionScreen.classList.add('hidden');
+      successScreen.classList.remove('hidden');
+    }
+
+    noButton.addEventListener('click', handleNoClick);
+    yesButton.addEventListener('click', handleYesClick);
+
+    const openLetterBtn = document.getElementById('openLetter');
+    const slides = document.getElementById('slides');
+    const dots = document.querySelectorAll('.dot');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      currentSlide = index;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    setInterval(() => {
+      const nextSlide = (currentSlide + 1) % dots.length;
+      showSlide(nextSlide);
+    }, 2500);
+
+    const envelope = document.getElementById('envelope');
+    const flap = document.getElementById('flap');
+
+    envelope.addEventListener('click', () => {
+      flap.style.transform = 'rotateX(180deg)';
+      setTimeout(() => {
+        const letter = document.getElementById('letter');
+        letter.classList.remove('hidden');
+      }, 400);
+    });
+  </script>
+</body>
+</html>
